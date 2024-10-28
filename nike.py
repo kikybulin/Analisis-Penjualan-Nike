@@ -1,53 +1,64 @@
-harga_sepatu = 100000 
-total_produksi = 50000  
-stok_awal = {
-    "hitam": 21500,
-    "putih": 15000,
-    "biru": 13500
-}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+penjualan_hitam = [900, 975, 1150, 1325, 1500, 1675, 1850, 2025, 2200, 2375, 2550, 2725]
+penjualan_putih = [1500, 1100, 1200, 1300, 1400, 1450, 1350, 1200, 1050, 900, 750, 600]
+penjualan_biru = [1000, 750, 725, 710, 700, 775, 720, 710, 760, 740, 730, 705]
 
 
-penjualan = {
-    "hitam": [900, 975, 1150, 1325, 1500, 1675, 1850, 2025, 2200, 2375, 2550, 2725],
-    "putih": [1500, 1100, 1200, 1300, 1400, 1450, 1350, 1200, 1050, 900, 750, 600],
-    "biru": [1000, 750, 725, 710, 700, 775, 720, 710, 760, 740, 730, 705]
-}
-
-def hitung_total_penjualan(penjualan_bulanan):
-    return sum(penjualan_bulanan)
+harga_sepasang = 100000
+produksi_target = {'hitam': 21500, 'putih': 15000, 'biru': 13500}
+biaya_total = 5000000000
 
 
-def hitung_pendapatan(total_penjualan, harga_per_unit):
-    return total_penjualan * harga_per_unit
+total_penjualan_hitam = sum(penjualan_hitam)
+total_penjualan_putih = sum(penjualan_putih)
+total_penjualan_biru = sum(penjualan_biru)
 
 
-def hitung_sisa_stok(stok_awal, total_terjual):
-    return stok_awal - total_terjual
+pendapatan_hitam = total_penjualan_hitam * harga_sepasang
+pendapatan_putih = total_penjualan_putih * harga_sepasang
+pendapatan_biru = total_penjualan_biru * harga_sepasang
+total_pendapatan = pendapatan_hitam + pendapatan_putih + pendapatan_biru
 
 
-hasil_analisis = {}
-total_pendapatan = 0  
-for warna, data_penjualan in penjualan.items():
-    total_terjual = hitung_total_penjualan(data_penjualan)
-    pendapatan = hitung_pendapatan(total_terjual, harga_sepatu)
-    sisa_stok = hitung_sisa_stok(stok_awal[warna], total_terjual)
-    
-    hasil_analisis[warna] = {
-        "total_terjual": total_terjual,
-        "pendapatan": pendapatan,
-        "sisa_stok": sisa_stok
-    }
-    total_pendapatan += pendapatan  
+persentase_penjualan_hitam = (total_penjualan_hitam / produksi_target['hitam']) * 100
+persentase_penjualan_putih = (total_penjualan_putih / produksi_target['putih']) * 100
+persentase_penjualan_biru = (total_penjualan_biru / produksi_target['biru']) * 100
 
 
-print("Hasil Analisis Penjualan Sepatu Niki")
-print("====================================")
-for warna, data in hasil_analisis.items():
-    print(f"Warna {warna.capitalize()}:")
-    print(f"  Total Terjual: {data['total_terjual']} pasang")
-    print(f"  Pendapatan   : Rp {data['pendapatan']}")
-    print(f"  Sisa Stok    : {data['sisa_stok']} pasang")
-    print("------------------------------------")
+keuntungan = total_pendapatan - biaya_total
 
 
-print(f"\nTotal Pendapatan Seluruh Penjualan: Rp {total_pendapatan}")
+print("Laporan Penjualan Bulanan per Warna:")
+print("Penjualan warna hitam:", penjualan_hitam)
+print("Penjualan warna putih:", penjualan_putih)
+print("Penjualan warna biru:", penjualan_biru)
+
+
+print("\nLaporan Persentase Penjualan Terhadap Target Produksi per Warna:")
+print(f"Persentase penjualan warna hitam: {persentase_penjualan_hitam:.2f}% dari target")
+print(f"Persentase penjualan warna putih: {persentase_penjualan_putih:.2f}% dari target")
+print(f"Persentase penjualan warna biru: {persentase_penjualan_biru:.2f}% dari target")
+
+
+print("\nLaporan Keuntungan Penjualan:")
+print(f"Pendapatan total warna hitam: Rp {pendapatan_hitam}")
+print(f"Pendapatan total warna putih: Rp {pendapatan_putih}")
+print(f"Pendapatan total warna biru: Rp {pendapatan_biru}")
+print(f"Total pendapatan: Rp {total_pendapatan}")
+print(f"Biaya produksi total: Rp {biaya_total}")
+print(f"Keuntungan bersih: Rp {keuntungan}")
+
+
+bulan = range(1, 13)
+plt.plot(bulan, penjualan_hitam, label='Hitam', marker='o')
+plt.plot(bulan, penjualan_putih, label='Putih', marker='o')
+plt.plot(bulan, penjualan_biru, label='Biru', marker='o')
+plt.xlabel("Bulan")
+plt.ylabel("Jumlah Penjualan")
+plt.title("Grafik Penjualan Sepatu Niki per Bulan Berdasarkan Warna")
+plt.legend()
+plt.grid(True)
+plt.show()
